@@ -1,43 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { 
-  Heart, MapPin, Calendar, Clock, Image as ImageIcon, Sparkles, Upload, 
-  Trash2, Shield, Eye, Download, LogIn, Lock, Instagram, Check, RefreshCw,
-  ChevronRight, Sparkle, Volume2, VolumeX, Database
-} from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { addRsvp, getRsvps, deleteRsvp, addPhoto, subscribeToPhotos, deletePhoto } from "./firebase";
-import {
-  isSupabaseConfigured, getSupabaseCredentials, saveSupabaseCredentials,
-  clearSupabaseCredentials, testSupabaseConnection, syncRsvpToSupabase,
-  syncPhotoToSupabase, deleteRsvpFromSupabase, deletePhotoFromSupabase,
-  fetchSupabaseRsvps, fetchSupabasePhotos
-} from "./supabase";
 
 export default function App() {
   const [curtainEnded, setCurtainEnded] = useState(false);
   const [skipCurtain, setSkipCurtain] = useState(false);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  const togglePlayAudio = () => {
-    if (!audioRef.current) return;
-    if (isPlayingAudio) {
-      audioRef.current.pause();
-      setIsPlayingAudio(false);
-    } else {
-      audioRef.current.play().then(() => setIsPlayingAudio(true)).catch(console.error);
-    }
-  };
-
-  useEffect(() => {
-    const showMain = curtainEnded || skipCurtain;
-    if (showMain && audioRef.current) {
-      const timer = setTimeout(() => {
-        audioRef.current?.play().then(() => setIsPlayingAudio(true)).catch(() => setIsPlayingAudio(false));
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [curtainEnded, skipCurtain]);
 
   const [mediaErrors, setMediaErrors] = useState<Record<string, boolean>>({});
   const handleMediaError = (key: string) => setMediaErrors((prev) => ({ ...prev, [key]: true }));
@@ -46,12 +14,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-burgundy-950 text-burgundy-50 font-sans relative overflow-x-hidden">
-      <audio
-        ref={audioRef}
-        src="media/sparks.mp3"
-        loop
-        preload="auto"
-      />
+      <audio ref={audioRef} src="media/sparks.mp3" loop preload="auto" />
 
       <AnimatePresence>
         {!showMainSite && (
@@ -83,20 +46,33 @@ export default function App() {
       </AnimatePresence>
 
       {showMainSite && (
-        <div className="relative">
-           {/* Chandelier Video Element */}
-           <div className="relative w-full h-64 overflow-hidden">
-             <video 
-                src="media/chandelier.mp4" 
-                autoPlay 
-                muted 
-                loop 
-                playsInline
-                className="w-full h-full object-cover opacity-80"
-             />
-           </div>
-           
-           <h1 className="text-center pt-20">Welcome to Yara x Ahmed's Wedding</h1>
+        <div className="relative min-h-screen w-full">
+          {/* Background Video - set to absolute so it scrolls with the page */}
+          <div className="absolute inset-0 z-0 w-full h-full">
+            <video 
+              src="media/chandelier.mp4" 
+              autoPlay 
+              muted 
+              loop 
+              playsInline
+              className="w-full h-full object-cover opacity-60"
+            />
+          </div>
+          
+          {/* Content Container */}
+          <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-8">
+            <div className="bg-burgundy-950/80 p-10 rounded-xl text-center shadow-2xl border border-gold-500/30">
+              <h1 className="text-5xl font-serif text-cream-100">
+                Yara & Ahmed
+              </h1>
+              <p className="mt-6 text-xl text-cream-200">We are so excited to celebrate with you!</p>
+              
+              {/* This spacer ensures there is enough content to scroll */}
+              <div className="h-[1000px] mt-10">
+                <p className="text-sm text-gold-300">Scroll down to see more...</p>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
