@@ -9,12 +9,14 @@ export default function App() {
   const [mediaErrors, setMediaErrors] = useState<Record<string, boolean>>({});
   const handleMediaError = (key: string) => setMediaErrors((prev) => ({ ...prev, [key]: true }));
 
-  // Force showMainSite to true if you are still having trouble seeing content
   const showMainSite = curtainEnded || skipCurtain;
+  
+  // This ensures the path correctly points to /burgundy-wedding/media/
+  const basePath = "/burgundy-wedding";
 
   return (
     <div className="min-h-screen bg-burgundy-950 text-burgundy-50 font-sans relative overflow-x-hidden">
-      <audio ref={audioRef} src="/media/sparks.mp3" loop preload="auto" />
+      <audio ref={audioRef} src={`${basePath}/media/sparks.mp3`} loop preload="auto" />
 
       <AnimatePresence>
         {!showMainSite && (
@@ -29,7 +31,7 @@ export default function App() {
             <div className="absolute inset-0 w-full h-full object-cover">
               {!mediaErrors["curtains"] ? (
                 <video 
-                  src="/media/curtains.mp4" 
+                  src={`${basePath}/media/curtains.mp4`} 
                   autoPlay 
                   muted 
                   playsInline
@@ -48,7 +50,7 @@ export default function App() {
       <div className="relative min-h-screen w-full">
         <div className="absolute inset-0 z-0 w-full h-full">
           <video 
-            src="/media/chandelier.mp4" 
+            src={`${basePath}/media/chandelier.mp4`} 
             autoPlay 
             muted 
             loop 
