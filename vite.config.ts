@@ -5,8 +5,8 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
   return {
-    // This MUST match your repository name exactly
-    base: '/burgundy-wedding/', 
+    // Changing base to './' tells Vite to use relative paths for your assets
+    base: './', 
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
