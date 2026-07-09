@@ -3,19 +3,15 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
 
-export default defineConfig(() => {
-  return {
-    // This MUST match your repository name exactly for GitHub Pages
-    base: '/burgundy-wedding/', 
-    plugins: [react(), tailwindcss()],
-    resolve: {
-      alias: {
-        '@': path.resolve(__dirname, './src'),
-      },
+export default defineConfig({
+  base: '/burgundy-wedding/', // Required for GitHub Pages project sites
+  plugins: [react(), tailwindcss()],
+  build: {
+    outDir: 'dist', // Ensures the output folder matches your deploy.yml
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
     },
-    server: {
-      hmr: process.env.DISABLE_HMR !== 'true',
-      watch: process.env.DISABLE_HMR === 'true' ? null : {},
-    },
-  };
+  },
 });
